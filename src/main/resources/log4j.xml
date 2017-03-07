@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration debug="true">
+        <appender name="ROLL" class="org.apache.log4j.rolling.RollingFileAppender">
+                <param name="file" value="${catalina.home}/logs/application.log" />
+                <param name="append" value="true" />
+                <param name="encoding" value="UTF-8" />
+
+                <rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+                        <param name="FileNamePattern" value="${catalina.home}/logs/application.%d.log.gz" />
+                </rollingPolicy>
+
+                <layout class="org.apache.log4j.PatternLayout">
+                        <param name="ConversionPattern" value="%5p %d{ISO8601} [%t][%x] %c - %m%n" />
+                </layout>
+        </appender>
+        <logger name="org.hibernate.engine.loading.LoadContexts"
+                additivity="false">
+                <level value="WARN" />
+                <appender-ref ref="ROLL" />
+        </logger>
+        <appender name="ST" class="org.apache.log4j.ConsoleAppender">
+                <layout class="org.apache.log4j.PatternLayout">
+                        <param name="ConversionPattern" value="%-4r [%t] %-5p %c %x - %m%n" />
+                </layout>
+        </appender>
+        <root>
+                <priority value="INFO" />
+                <appender-ref ref="ROLL" />
+                <appender-ref ref="ST" />
+        </root>
+
+</log4j:configuration>
