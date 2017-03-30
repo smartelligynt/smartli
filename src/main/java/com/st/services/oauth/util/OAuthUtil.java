@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.sql.SQLException;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -20,15 +18,10 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.cxf.common.util.StringUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import com.st.services.oauth.AuthError;
-import com.st.services.oauth.AuthServiceErrors;
-import com.st.services.oauth.OAuthException;
-import com.st.services.oauth.token.OAuthToken;
-import com.st.services.util.Util;
 
 public class OAuthUtil {
 
@@ -56,35 +49,9 @@ public class OAuthUtil {
 		}
 		return sb.toString();
 	}
-/*
-	public static void checkTPTokenResponse(String thirdPartyId,
-			RestServiceResponse response) {
-		_logger.fine("Checking TP Token Response");
-		if (!(response.getResponseCode() >= AccountServiceConstants.CODE_200 && response
-				.getResponseCode() < AccountServiceConstants.CODE_300)) {
-			throwInvalidTPResponse(thirdPartyId, response);
-		}
-	}
-*/
-	/*
-	public static void throwInvalidTPResponse(String thirdPartyId,
-			RestServiceResponse response) {
-		_logger.info("Throwing Invalid TP Response");
-		AuthError error = new AuthError(
-				AuthServiceErrors.INVALID_TP_RESPONSE.getCode(),
-				AuthServiceErrors.INVALID_TP_RESPONSE.getMessage()
-						+ thirdPartyId);
-		error.setDescription(response.getBody());
-		throw new OAuthException(error, Status.fromStatusCode(response
-				.getResponseCode()));
-	}
-*/
-	public static OAuthToken getLatestTokenFromList(List<OAuthToken> tokenList) {
-		_logger.info("Getting latest token from TokenList");
-		Collections.sort(tokenList, new TokenSortComparatorByIssueDate());
-		return tokenList.get(0);
 
-	}
+
+
 
 	public static Map<String, String> readXmlKeyValuesWithXpath(String body,
 			Map<String, String> attributesXPath)
@@ -93,7 +60,7 @@ public class OAuthUtil {
 		_logger.info("Reading Xml Key values Using XPath");
 
 		Map<String, String> responseMap = new HashMap<String, String>();
-		if (Util.isEmpty(body)) {
+		if (StringUtils.isEmpty(body)) {
 			return responseMap;
 		}
 
@@ -109,7 +76,7 @@ public class OAuthUtil {
 
 		for (Map.Entry<String, String> entry : attributesXPath.entrySet()) {
 			value = xpath.evaluate(entry.getValue(), document);
-			if (!Util.isEmpty(value)) {
+			if (!StringUtils.isEmpty(value)) {
 				responseMap.put(entry.getKey(), value);
 
 			}
@@ -117,21 +84,7 @@ public class OAuthUtil {
 
 		return responseMap;
 	}
-/*
-	public static OAuthException getOAuthExceptionFromRestClientException(
-			RestClientException rce) {
-		_logger.fine("Building OAuthException from RestClientException");
-		AuthError tpa = new AuthError();
-		tpa.setCode(rce.getError().getCode());
-		tpa.setMessage(rce.getError().getMessage());
-		if (!rce.getError().getCode()
-				.equals(RestClientError.UNKNOWN_ERROR.getCode())) {
-			return new OAuthException(tpa, Status.SERVICE_UNAVAILABLE);
-		}
-		tpa.setDescription(rce.getError().getDescription());
-		return new OAuthException(tpa, Status.INTERNAL_SERVER_ERROR);
-	}
-*/
+
 	public static OAuthException getOAuthExceptionForSQLException(
 			SQLException sqle) {
 		_logger.fine("Building OAuthException from SQLException");
