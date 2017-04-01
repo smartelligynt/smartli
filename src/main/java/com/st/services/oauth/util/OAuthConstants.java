@@ -51,9 +51,10 @@ public class OAuthConstants {
 	public static final Object REFRESH_TOKEN_EXPIRE_TIME = "refresh_token_expire_time";
 	public static final String CONTENT_TYPE = "Content-Type";
 	public static final String HOST = "Host";
+	public static final String UTF = "UTF-8";
 	
 	
-	public static TypeReference<HashMap<String, String>> TYPE_REFERENCE = new TypeReference<HashMap<String, String>>() {
+	public static TypeReference<HashMap<String, Object>> TYPE_REFERENCE = new TypeReference<HashMap<String, Object>>() {
 	};
 	
 }

@@ -265,5 +265,11 @@ public class ThirdPartyInfoEntity extends BaseEntity {
 				});
 
 	}
+	
+	
+	public String toString() {
+		
+		return "";
+	}
 
 }
